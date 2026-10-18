@@ -1,0 +1,125 @@
+<html>
+<title>Càlcul de apostes</title>
+<body onLoad="document.getElementById('enviar').focus();">
+  <script>
+    function calculaapuesta() {
+      //Primero se cálcula el porcentaje de beneficio de las apuestas para ello es el sumatorio de la inversa de todas las probabilidades
+      var porcentajebeneficio = 0;
+      var beneficioSinPorcentaje = 0;
+      var fracciondepago = 0;
+      var cantidadDecimales = parseInt(2);
+      var cuota1 = document.getElementById("cuota1").value;
+      var cuotax = document.getElementById("cuotax").value;
+      var cuota2 = document.getElementById("cuota2").value;
+  
+      var inversacuota1 = 1/cuota1;
+      var inversacuotax = 1/cuotax;
+      var inversacuota2 = 1/cuota2;
+      
+      //Una apuesta segura es si 1/cuotaA+1/cuotaB+1/cuotaC<1, con esto se cálcula el margen de beneficio de la casa de apuestas
+      margenDeBeneficio = parseFloat(inversacuota1.toFixed(cantidadDecimales));
+      margenDeBeneficio += parseFloat(inversacuotax.toFixed(cantidadDecimales));
+      margenDeBeneficio += parseFloat(inversacuota2.toFixed(cantidadDecimales));
+  
+      //El margen de beneficio de la casa de apuestas es [1-(1/cuotaA+1/cuotaB+1/cuotaC)]*100
+      beneficioSinPorcentaje = (1-margenDeBeneficio);
+      //La fracción de pago es la inversa del margen de beneficio de la casa de apuestas
+      //Es decir es la cantidad que paga la casa de apuestas por la
+      fracciondepago = 1/margenDeBeneficio;
+      var probabilidadCasaApuestas1 = inversacuota1 * fracciondepago;
+      var probabilidadCasaApuestasx = inversacuotax * fracciondepago;
+      var probabilidadCasaApuestas2 = inversacuota2 * fracciondepago; 
+      //El margen de beneficio de la casa de apuestas
+      margenDeBeneficio = (beneficioSinPorcentaje*100).toFixed(cantidadDecimales);
+      
+      //Ahora se obtiene lo que se puede apostar en cada resultado
+      var inversion = document.getElementById("inversion").value;
+alert(margenDeBeneficio);
+alert(parseFloat(inversion)*parseFloat(beneficioSinPorcentaje));
+      //Se cálcula el total de la inversión con el beneficio
+      var totalInversion = (parseFloat(inversion)*parseFloat(beneficioSinPorcentaje))+parseFloat(inversion);
+  
+      //La cantidad a apostar en un resultado es apostaraA= ApuestaMaximaTotal/cuotaA
+      var apuestaresultado1 = totalInversion/cuota1;
+      var apuestaresultadox = totalInversion/cuotax;
+      var apuestaresultado2 = totalInversion/cuota2;
+  
+      //Cuanto se debe asignar a cada inversión    
+      document.getElementById("apuestaarealizar1").innerHTML = apuestaresultado1.toFixed(cantidadDecimales);
+      document.getElementById("apuestaarealizarx").innerHTML = apuestaresultadox.toFixed(cantidadDecimales);
+      document.getElementById("apuestaarealizar2").innerHTML = apuestaresultado2.toFixed(cantidadDecimales);
+      document.getElementById("total").innerHTML = (apuestaresultado1+apuestaresultadox+apuestaresultado2).toFixed(cantidadDecimales);
+  
+      //Cálculo de la cantidad de ganancia/perdida
+      document.getElementById("beneficioneto").innerHTML = (inversion*parseFloat(beneficioSinPorcentaje)).toFixed(cantidadDecimales);    
+  
+      //Cálculo de la cantidad de ganancia/perdida
+      document.getElementById("porcentajedebeneficio").innerHTML = (parseFloat(margenDeBeneficio)).toFixed(cantidadDecimales)+' %';
+  
+      //Cuanto se debe asignar a cada inversión    
+      document.getElementById("probabilidadCasaApuestas1").innerHTML = (probabilidadCasaApuestas1*100).toFixed(cantidadDecimales)+' %';
+      document.getElementById("probabilidadCasaApuestasx").innerHTML = (probabilidadCasaApuestasx*100).toFixed(cantidadDecimales)+' %';
+      document.getElementById("probabilidadCasaApuestas2").innerHTML = (probabilidadCasaApuestas2*100).toFixed(cantidadDecimales)+' %';
+      document.getElementById("probabilidadCasaApuestasTotal").innerHTML = ((probabilidadCasaApuestas1+probabilidadCasaApuestasx+
+      probabilidadCasaApuestas2)*100).toFixed(cantidadDecimales)+' %';
+    }
+  </script>
+  <h1>Escobilles.</h1>
+  <table class="margenes" width="580px" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr>
+      	<td>Resultados</td>
+          <td class="cuotas">Cuota 1</td>
+          <td class="cuotas">Cuota X</td>
+          <td class="cuotas">Cuota 2</td>
+          <td>Total</td>
+        </tr><tr>
+          <td>Cuotas</td>
+          <td><input name="cuota1" type="text" id="cuota1" value="4"></td>
+          <td><input name="cuotax" type="text" id="cuotax" value="3"></td>
+          <td><input name="cuota2" type="text" id="cuota2" value="1"></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Inversión</td>
+          <td colspan="3"><input name="inversion" type="text" id="inversion" value="3"></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Apuesta a realizar</td>
+          <td id="apuestaarealizar1"></td>
+          <td id="apuestaarealizarx"></td>
+          <td id="apuestaarealizar2"></td>
+          <td id="total"></td>
+        </tr>
+        <tr>
+          <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Beneficio Neto</td>
+          <td id="beneficioneto" colspan="3"></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>% de Beneficio</td>
+          <td id="porcentajedebeneficio" colspan="3"></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Probabilidad de la casa de apuestas</td>
+          <td id="probabilidadCasaApuestas1"></td>
+          <td id="probabilidadCasaApuestasx"></td>
+          <td id="probabilidadCasaApuestas2"></td>
+          <td id="probabilidadCasaApuestasTotal"></td>
+        </tr><tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td colspan="4"><input type="submit" name="enviar" id="enviar" value="Calcular" onclick="calculaapuesta()"></td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
